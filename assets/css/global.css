@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#__nuxt {
+    width: 100%;
+    height: 100dvh;
+}
+
+body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: url('~/assets/images/forest_bg.jpg') center center/cover no-repeat;
+    /* background-color: #ccc; */
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+    -moz-appearance: textfield;
+}
