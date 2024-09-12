@@ -1,3 +1,5 @@
+import type { StatusEnum } from '~/types';
+
 export interface ITaskWrapperProps {
-    title: 'TODO' | 'Done' | 'In progress';
+    title: StatusEnum;
 }
