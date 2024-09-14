@@ -15,7 +15,7 @@ export enum PriorityEnum {
 export interface ITask {
     title: string;
     description: string;
-    responsiblePerson: string;
+    responsiblePerson: string[];
     performers: string[];
     status: StatusEnum;
     priority: PriorityEnum;

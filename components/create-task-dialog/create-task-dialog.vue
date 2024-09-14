@@ -1,10 +1,16 @@
 <template>
     <form
-        ref="createTask"
-        class="flex min-h-[30%] w-1/2 flex-col items-start justify-start gap-6 rounded-md bg-white p-4"
+        class="flex h-full flex-col items-start justify-start gap-6 rounded-md bg-white p-4 md:h-auto md:w-1/2"
         @click.stop
         @submit.prevent="onCreateTask"
     >
+        <button
+            type="button"
+            class="ml-auto block rounded-md p-2 transition-colors active:bg-gray-300 lg:hover:bg-gray-300"
+            @click="emit('close-dialog')"
+        >
+            <x-mark-icon class="size-3 md:size-5" />
+        </button>
         <input
             v-model="taskName"
             type="text"
@@ -17,33 +23,57 @@
             class="w-full resize-none rounded-md border border-slate-500 px-3 py-2"
         />
         <div>
-            <label
-                v-for="(performer, idx) in fakePerformers"
-                :key="idx"
-                class="flex w-full items-center justify-start gap-1"
-            >
-                <input v-model="performers" type="checkbox" :value="performer" />
-                <span>{{ performer }}</span>
-            </label>
+            <span class="mb-2 block">Select responsible person:</span>
+            <div class="flex flex-wrap gap-x-3 gap-y-1">
+                <label
+                    v-for="(person, idx) in fakeResponsiblePersons"
+                    :key="idx"
+                    class="flex items-center justify-start gap-1"
+                >
+                    <input v-model="responsiblePersons" type="checkbox" :value="person" />
+                    <span>{{ person }}</span>
+                </label>
+            </div>
         </div>
-        <select v-model="taskStatus" class="w-full rounded-md border border-slate-500 px-3 py-2">
-            <option value="" disabled selected>Select task status</option>
-            <option :value="StatusEnum.TODO">{{ StatusEnum.TODO }}</option>
-            <option :value="StatusEnum.IN_PROGRESS">{{ StatusEnum.IN_PROGRESS }}</option>
-            <option :value="StatusEnum.DONE">{{ StatusEnum.DONE }}</option>
-        </select>
-        <select v-model="taskPriority" class="w-full rounded-md border border-slate-500 px-3 py-2">
-            <option value="" disabled selected>Select task priority</option>
-            <option :value="PriorityEnum.HIGHEST">{{ PriorityEnum.HIGHEST }}</option>
-            <option :value="PriorityEnum.CRITICAL">{{ PriorityEnum.CRITICAL }}</option>
-            <option :value="PriorityEnum.ALARMING">{{ PriorityEnum.ALARMING }}</option>
-            <option :value="PriorityEnum.LOW">{{ PriorityEnum.LOW }}</option>
-            <option :value="PriorityEnum.LOWEST">{{ PriorityEnum.LOWEST }}</option>
-        </select>
+        <div>
+            <span class="mb-2 block">Select performers:</span>
+            <div class="flex flex-wrap gap-x-3 gap-y-1">
+                <label
+                    v-for="(performer, idx) in fakePerformers"
+                    :key="idx"
+                    class="flex items-center justify-start gap-1"
+                >
+                    <input v-model="performers" type="checkbox" :value="performer" />
+                    <span>{{ performer }}</span>
+                </label>
+            </div>
+        </div>
+        <label class="w-full">
+            <span class="mb-2 block">Select task status:</span>
+            <select
+                v-model="taskStatus"
+                class="w-full rounded-md border border-slate-500 px-3 py-2 disabled:opacity-30"
+            >
+                <option :value="StatusEnum.TODO" selected>{{ StatusEnum.TODO }}</option>
+                <option :value="StatusEnum.IN_PROGRESS">{{ StatusEnum.IN_PROGRESS }}</option>
+                <option :value="StatusEnum.DONE">{{ StatusEnum.DONE }}</option>
+            </select>
+        </label>
+        <label class="w-full">
+            <span class="mb-2 block">Select task priority:</span>
+            <select v-model="taskPriority" class="w-full rounded-md border border-slate-500 px-3 py-2">
+                <option :value="PriorityEnum.HIGHEST" selected>{{ PriorityEnum.HIGHEST }}</option>
+                <option :value="PriorityEnum.CRITICAL">{{ PriorityEnum.CRITICAL }}</option>
+                <option :value="PriorityEnum.ALARMING">{{ PriorityEnum.ALARMING }}</option>
+                <option :value="PriorityEnum.LOW">{{ PriorityEnum.LOW }}</option>
+                <option :value="PriorityEnum.LOWEST">{{ PriorityEnum.LOWEST }}</option>
+            </select>
+        </label>
+
         <button
             :disabled="!isNewTaskValid"
             type="submit"
-            class=":disabled:pointer-events-none mx-auto block rounded-md bg-slate-500 px-3 py-2 text-white transition-colors active:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-30 md:hover:bg-slate-600"
+            class=":disabled:pointer-events-none mx-auto block w-full rounded-md bg-slate-500 px-12 py-2 text-white transition-colors active:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-30 md:w-max md:hover:bg-slate-600"
         >
             Create
         </button>
@@ -51,40 +81,50 @@
 </template>
 
 <script lang="ts" setup>
-import { fakePerformers } from './fake-data';
+import { XMarkIcon } from '@heroicons/vue/24/solid';
+
+import { fakePerformers, fakeResponsiblePersons } from './fake-data';
+
+import type { ITask } from '~/types';
 
 import { PriorityEnum, StatusEnum } from '~/types';
-const createTask = ref<HTMLFormElement | null>(null);
+
 const taskName = ref<string>('');
 const taskDescription = ref<string>('');
+const responsiblePersons = ref<string[]>([]);
 const performers = ref<string[]>([]);
-const taskStatus = ref<string>('');
-const taskPriority = ref<string>('');
+const taskStatus = ref<StatusEnum>(StatusEnum.TODO);
+const taskPriority = ref<PriorityEnum>(PriorityEnum.LOWEST);
 
-export interface ITask {
-    title: string;
-    description: string;
-    responsiblePerson: string;
-    performers: string[];
-    status: StatusEnum;
-    priority: PriorityEnum;
-}
+const emit = defineEmits<{ (e: 'create-task', value: ITask): void; (event: 'close-dialog'): void }>();
+
+const clearForm = (): void => {
+    taskName.value = '';
+    taskDescription.value = '';
+    responsiblePersons.value = [];
+    performers.value = [];
+    taskStatus.value = StatusEnum.TODO;
+    taskPriority.value = PriorityEnum.LOWEST;
+};
 
 const onCreateTask = (): void => {
-    console.log({
+    emit('create-task', {
         title: taskName.value,
         description: taskDescription.value,
+        responsiblePerson: responsiblePersons.value,
         performers: performers.value,
         status: taskStatus.value,
         priority: taskPriority.value,
     });
-    createTask.value?.reset();
+
+    clearForm();
 };
 
 const isNewTaskValid = computed<boolean>(() => {
     return Boolean(
         taskName.value &&
             taskDescription.value &&
+            responsiblePersons.value.length >= 1 &&
             performers.value.length >= 1 &&
             taskStatus.value &&
             taskPriority.value

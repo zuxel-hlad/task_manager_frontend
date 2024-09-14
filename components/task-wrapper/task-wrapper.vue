@@ -10,8 +10,12 @@
                     <arrow-left-icon class="size-3 rotate-180 text-black" />
                     <arrow-left-icon class="size-3 text-black" />
                 </button>
-                <button type="button" class="rounded-md p-2 transition-colors active:bg-gray-300 lg:hover:bg-gray-300">
-                    <ellipsis-horizontal-icon class="size-3 text-black" />
+                <button
+                    type="button"
+                    class="rounded-md p-2 transition-colors active:bg-gray-300 lg:hover:bg-gray-300"
+                    @click="emit('create-task')"
+                >
+                    <ellipsis-horizontal-icon class="size-3 text-black md:size-5" />
                 </button>
             </div>
         </div>
@@ -25,7 +29,7 @@
                 class="flex grow items-center justify-start gap-1 text-base font-medium md:text-xl"
                 title="Drag task here"
             >
-                <plus-icon class="size-5" />Add a cart
+                <plus-icon class="size-3 md:size-5" />Add a cart
             </span>
             <div
                 class="flex items-center justify-center rounded-md border border-dotted border-gray-400 p-1"
@@ -38,11 +42,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ArrowLeftIcon, EllipsisHorizontalIcon, PlusIcon } from '@heroicons/vue/16/solid';
+import { ArrowLeftIcon, PlusIcon, EllipsisHorizontalIcon } from '@heroicons/vue/24/solid';
 
 import type { ITaskWrapperProps } from './task-wrapper.props';
 
 import TaskItem from '~/components/task-item/task-item.vue';
 
 const props = defineProps<ITaskWrapperProps>();
+const emit = defineEmits<{ (e: 'create-task'): void }>();
 </script>

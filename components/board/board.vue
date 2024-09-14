@@ -1,11 +1,11 @@
 <template>
     <div class="flex h-full flex-col items-start gap-5 md:flex-row">
-        <task-wrapper :title="StatusEnum.TODO" />
-        <task-wrapper :title="StatusEnum.IN_PROGRESS" />
-        <task-wrapper :title="StatusEnum.DONE" />
+        <task-wrapper :title="StatusEnum.TODO" @create-task="onShowDialog" />
+        <task-wrapper :title="StatusEnum.IN_PROGRESS" @create-task="onShowDialog" />
+        <task-wrapper :title="StatusEnum.DONE" @create-task="onShowDialog" />
     </div>
-    <app-modal v-model="modal">
-        <create-task-dialog />
+    <app-modal v-model="createTaskModal">
+        <create-task-dialog @close-dialog="onCloseDialog" />
     </app-modal>
 </template>
 <script lang="ts" setup>
@@ -14,5 +14,13 @@ import CreateTaskDialog from '~/components/create-task-dialog/create-task-dialog
 import TaskWrapper from '~/components/task-wrapper/task-wrapper.vue';
 import { StatusEnum } from '~/types';
 
-const modal = ref<boolean>(true);
+const createTaskModal = ref<boolean>(false);
+
+const onShowDialog = () => {
+    createTaskModal.value = true;
+};
+
+const onCloseDialog = (): void => {
+    createTaskModal.value = false;
+};
 </script>

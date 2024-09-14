@@ -8,3 +8,14 @@ export const fakePerformers: string[] = [
     'Fake Agent',
     'Alex Lapkin',
 ];
+
+export const fakeResponsiblePersons: string[] = [
+    'Valentina Burenko',
+    'Maryna Dubova',
+    'Alexander Vasischev',
+    'Olya Strelkina',
+    'Azamat Barunov',
+    'Joe Fox',
+    'Fake User1',
+    'Tony Johnson',
+];
