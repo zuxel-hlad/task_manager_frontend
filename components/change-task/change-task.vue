@@ -1,16 +1,12 @@
 <template>
-    <form
-        class="flex h-full flex-col items-start justify-start gap-6 rounded-md bg-white p-4 md:h-auto md:w-1/2"
-        @click.stop
-        @submit.prevent="onCreateTask"
+    <div
+        class="fixed inset-y-0 right-0 flex flex-col gap-5 bg-white p-5 transition-transform lg:w-1/2"
+        :class="{ 'translate-x-0': isShow, 'translate-x-full': !isShow }"
     >
-        <button
-            type="button"
-            class="ml-auto block rounded-md p-2 transition-colors active:bg-gray-300 lg:hover:bg-gray-300"
-            @click="emit('close-dialog')"
-        >
-            <x-mark-icon class="size-3 md:size-5" />
-        </button>
+        <div>
+            <span class="mb-1 block">Priority:</span>
+            <div class="h-4 rounded-md" :class="taskPriorities" />
+        </div>
         <input
             v-model="taskName"
             type="text"
@@ -51,11 +47,12 @@
         <label class="w-full">
             <span class="mb-2 block">Select task status:</span>
             <select
-                class="w-full rounded-md border border-slate-500 px-3 py-2 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-30"
-                :value="props.type"
-                disabled
+                v-model="taskStatus"
+                class="w-full rounded-md border border-slate-500 px-3 py-2 disabled:opacity-30"
             >
-                <option :value="props.type" selected>{{ props.type }}</option>
+                <option :value="StatusEnum.TODO" selected>{{ StatusEnum.TODO }}</option>
+                <option :value="StatusEnum.IN_PROGRESS">{{ StatusEnum.IN_PROGRESS }}</option>
+                <option :value="StatusEnum.DONE">{{ StatusEnum.DONE }}</option>
             </select>
         </label>
         <label class="w-full">
@@ -68,66 +65,46 @@
                 <option :value="PriorityEnum.LOWEST">{{ PriorityEnum.LOWEST }}</option>
             </select>
         </label>
-
-        <button
-            :disabled="!isNewTaskValid"
-            type="submit"
-            class=":disabled:pointer-events-none mx-auto block w-full rounded-md bg-slate-500 px-12 py-2 text-white transition-colors active:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-30 md:w-max md:hover:bg-slate-600"
-        >
-            Create
-        </button>
-    </form>
+        <div class="flex flex-col items-start justify-center gap-3 sm:flex-row sm:gap-8">
+            <button
+                type="submit"
+                class=":disabled:pointer-events-none block w-full rounded-md bg-red-500 px-12 py-2 text-white transition-colors active:bg-red-700 disabled:cursor-not-allowed disabled:opacity-30 md:w-max md:hover:bg-red-600"
+            >
+                Delete
+            </button>
+            <button
+                type="submit"
+                class=":disabled:pointer-events-none block w-full rounded-md bg-slate-500 px-12 py-2 text-white transition-colors active:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-30 md:w-max md:hover:bg-slate-600"
+            >
+                Save
+            </button>
+        </div>
+    </div>
 </template>
-
 <script lang="ts" setup>
-import { XMarkIcon } from '@heroicons/vue/24/solid';
+import { fakePerformers, fakeResponsiblePersons } from '~/components/create-task-dialog/fake-data';
+import { useTasksStore } from '~/store/tasks/tasks';
+import { PriorityEnum, StatusEnum } from '~/types';
+const isShow = ref<boolean>(false);
 
-import { fakePerformers, fakeResponsiblePersons } from './fake-data';
-
-import type { ICreateTaskDialogProps } from './create-task-dialog.props';
-import type { ITask } from '~/types';
-
-import { randomId } from '~/helpers/random-id-generator';
-import { PriorityEnum } from '~/types';
-
-const props = defineProps<ICreateTaskDialogProps>();
-const emit = defineEmits<{ (e: 'create-task', value: ITask): void; (event: 'close-dialog'): void }>();
+const store = useTasksStore();
 
 const taskName = ref<string>('');
 const taskDescription = ref<string>('');
 const responsiblePersons = ref<string[]>([]);
 const performers = ref<string[]>([]);
+const taskStatus = ref<StatusEnum>(StatusEnum.TODO);
 const taskPriority = ref<PriorityEnum>(PriorityEnum.LOWEST);
 
-const clearForm = (): void => {
-    taskName.value = '';
-    taskDescription.value = '';
-    responsiblePersons.value = [];
-    performers.value = [];
-    taskPriority.value = PriorityEnum.LOWEST;
+const testObj = {
+    priority: 'Lowest',
 };
 
-const onCreateTask = (): void => {
-    emit('create-task', {
-        id: randomId(5),
-        title: taskName.value,
-        description: taskDescription.value,
-        responsiblePerson: responsiblePersons.value,
-        performers: performers.value,
-        status: props.type,
-        priority: taskPriority.value,
-    });
-
-    clearForm();
-};
-
-const isNewTaskValid = computed<boolean>(() => {
-    return Boolean(
-        taskName.value &&
-            taskDescription.value &&
-            responsiblePersons.value.length >= 1 &&
-            performers.value.length >= 1 &&
-            taskPriority.value
-    );
-});
+const taskPriorities = computed<{ [key: string]: boolean }>(() => ({
+    'bg-gray-500': testObj.priority === 'Lowest',
+    'bg-blue-500': testObj.priority === 'Low',
+    'bg-green-500': testObj.priority === 'Highest',
+    'bg-orange-500': testObj.priority === 'Critical',
+    'bg-red-500': testObj.priority === 'Alarming',
+}));
 </script>

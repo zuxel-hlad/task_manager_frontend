@@ -13,16 +13,14 @@
                 <button
                     type="button"
                     class="rounded-md p-2 transition-colors active:bg-gray-300 lg:hover:bg-gray-300"
-                    @click="emit('create-task')"
+                    @click="emit('create-task', props.title)"
                 >
                     <ellipsis-horizontal-icon class="size-3 text-black md:size-5" />
                 </button>
             </div>
         </div>
         <div class="my-5 flex flex-col items-start justify-start gap-3">
-            <TaskItem />
-            <TaskItem />
-            <TaskItem />
+            <TaskItem v-for="task in tasks" :key="task.id" :title="task.title" />
         </div>
         <div class="flex items-center justify-between gap-2">
             <span
@@ -45,9 +43,10 @@
 import { ArrowLeftIcon, PlusIcon, EllipsisHorizontalIcon } from '@heroicons/vue/24/solid';
 
 import type { ITaskWrapperProps } from './task-wrapper.props';
+import type { StatusEnum } from '~/types';
 
 import TaskItem from '~/components/task-item/task-item.vue';
 
 const props = defineProps<ITaskWrapperProps>();
-const emit = defineEmits<{ (e: 'create-task'): void }>();
+const emit = defineEmits<{ (e: 'create-task', type: StatusEnum): void }>();
 </script>
