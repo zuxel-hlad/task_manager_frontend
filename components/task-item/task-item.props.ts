@@ -1,3 +1,5 @@
+import type { ITask } from "~/types";
+
 export interface ITaskItemProps {
-    title: string;
+    task: ITask
 }
