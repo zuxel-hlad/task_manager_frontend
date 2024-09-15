@@ -1,9 +1,9 @@
-import type { ITask, StatusEnum } from '~/types';
+import type { ITask, StatusEnum } from "~/types";
 
 export interface ITasksState {
-    tasks: ITask[];
-    createTaskModal: boolean;
-    createTaskModalType: StatusEnum;
-    changeTaskDialog: boolean;
-    taskToChange: ITask | null;
+  tasks: ITask[];
+  createTaskModal: boolean;
+  createTaskModalType: StatusEnum;
+  changeTaskDialog: boolean;
+  taskToChange: ITask | null;
 }

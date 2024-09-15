@@ -1,6 +1,6 @@
-import type { ITask } from '~/types';
+import type { ITask } from "~/types";
 
 export interface IChangeTaskProps {
-    visibility: boolean;
-    task: ITask | null;
+  visibility: boolean;
+  task: ITask | null;
 }
