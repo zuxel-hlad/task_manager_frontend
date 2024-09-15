@@ -21,3 +21,14 @@ export interface ITask {
     status: StatusEnum;
     priority: PriorityEnum;
 }
+
+export interface IMoveEvent {
+    removed?: {
+        element: ITask;
+        oldIndex: number;
+    };
+    added?: {
+        element: ITask;
+        newIndex: number;
+    };
+}

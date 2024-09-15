@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 
 import type { ITasksState } from './tasks.types';
 
-import { PriorityEnum, StatusEnum, type ITask } from '~/types';
+import { PriorityEnum, StatusEnum, type IMoveEvent, type ITask } from '~/types';
 
 export const useTasksStore = defineStore('tasks', {
     state: () =>
@@ -17,6 +17,15 @@ export const useTasksStore = defineStore('tasks', {
                     status: StatusEnum.TODO,
                     priority: PriorityEnum.ALARMING,
                 },
+                {
+                    id: '87as65dhgjsagda2',
+                    title: 'FirstTask',
+                    description: 'string some task',
+                    responsiblePerson: ['Maryna Dubova', 'Alexander Vasischev', 'Olya Strelkina', 'Azamat Barunov'],
+                    performers: ['Olya Caplia', 'Pes Patron', 'Bob Chernobay', 'Fake Agent', 'Alex Lapkin'],
+                    status: StatusEnum.TODO,
+                    priority: PriorityEnum.CRITICAL,
+                },
             ],
             createTaskModal: false,
             createTaskModalType: StatusEnum.TODO,
@@ -25,12 +34,26 @@ export const useTasksStore = defineStore('tasks', {
         }) as ITasksState,
 
     getters: {
-        toToTasks: (state): ITask[] => state.tasks.filter(task => task.status === StatusEnum.TODO),
+        todoTasks: (state): ITask[] => state.tasks.filter(task => task.status === StatusEnum.TODO),
         inProgressTasks: (state): ITask[] => state.tasks.filter(task => task.status === StatusEnum.IN_PROGRESS),
         doneTasks: (state): ITask[] => state.tasks.filter(task => task.status === StatusEnum.DONE),
     },
 
     actions: {
+        moveTask(e: IMoveEvent, movedTo: StatusEnum): void {
+            if ('added' in e) {
+                this.tasks = this.tasks.map(task => {
+                    if (task.id === e.added?.element.id) {
+                        return {
+                            ...task,
+                            status: movedTo,
+                        };
+                    }
+                    return task;
+                });
+            }
+        },
+
         changeTask(id: string): void {
             this.changeTaskDialog = true;
             const changedTask = this.tasks.find(task => task.id === id);

@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full rounded-xl bg-gray-200 p-4">
+    <div class="h-max w-full rounded-xl bg-gray-200 p-4">
         <div class="flex items-center">
             <span class="grow text-base font-medium md:text-xl">{{ props.title }}</span>
             <div class="flex items-center justify-start">
@@ -19,8 +19,8 @@
                 </button>
             </div>
         </div>
-        <div class="my-5 flex flex-col items-start justify-start gap-3">
-            <TaskItem v-for="task in tasks" :key="task.id" :task="task" @change-task="emit('change-task', task.id)" />
+        <div>
+            <slot />
         </div>
         <div class="flex items-center justify-between gap-2">
             <span
@@ -45,8 +45,6 @@ import { ArrowLeftIcon, PlusIcon } from '@heroicons/vue/24/solid';
 import type { ITaskWrapperProps } from './task-wrapper.props';
 import type { StatusEnum } from '~/types';
 
-import TaskItem from '~/components/task-item/task-item.vue';
-
 const props = defineProps<ITaskWrapperProps>();
-const emit = defineEmits<{ (e: 'create-task', type: StatusEnum): void; (e: 'change-task', value: string): void }>();
+const emit = defineEmits<{ (e: 'create-task', type: StatusEnum): void }>();
 </script>

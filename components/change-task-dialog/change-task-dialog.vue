@@ -112,11 +112,11 @@ let task = reactive<ITask>({
 });
 
 const taskPriorities = computed<{ [key: string]: boolean }>(() => ({
-    'bg-gray-500': task.priority === 'Lowest',
-    'bg-blue-500': task.priority === 'Low',
-    'bg-green-500': task.priority === 'Highest',
-    'bg-orange-500': task.priority === 'Critical',
-    'bg-red-500': task.priority === 'Alarming',
+    'bg-gray-500': task.priority === PriorityEnum.LOWEST,
+    'bg-blue-500': task.priority === PriorityEnum.LOW,
+    'bg-green-500': task.priority === PriorityEnum.HIGHEST,
+    'bg-orange-500': task.priority === PriorityEnum.CRITICAL,
+    'bg-red-500': task.priority === PriorityEnum.ALARMING,
 }));
 
 const onUpdateTask = (): void => {
@@ -127,11 +127,15 @@ const onDeleteTask = (): void => {
     emit('delete-task', task.id);
 };
 
-watchEffect(() => {
-    if (props.task) {
-        task = {
-            ...props.task,
-        };
-    }
-});
+watch(
+    task,
+    () => {
+        if (props.task) {
+            task = {
+                ...props.task,
+            };
+        }
+    },
+    { deep: true }
+);
 </script>
