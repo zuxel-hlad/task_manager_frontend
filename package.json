@@ -1,40 +1,40 @@
 {
-  "name": "nuxt-app",
-  "private": true,
-  "type": "module",
-  "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "lint": "eslint .",
-    "format": "prettier --write \"**/*.+(ts|mjs|vue|json|css|md)\""
-  },
-  "dependencies": {
-    "@nuxt/fonts": "^0.7.2",
-    "@pinia/nuxt": "^0.5.4",
-    "nuxt": "^3.13.0",
-    "vue": "latest"
-  },
-  "devDependencies": {
-    "@heroicons/vue": "^2.1.5",
-    "@nuxt/eslint": "^0.5.2",
-    "@nuxt/eslint-config": "^0.5.2",
-    "@nuxtjs/eslint-config-typescript": "^12.1.0",
-    "@nuxtjs/tailwindcss": "^6.12.1",
-    "autoprefixer": "^10.4.20",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-tailwindcss": "^3.17.4",
-    "pinia": "^2.2.2",
-    "postcss": "^8.4.41",
-    "prettier": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.6.6",
-    "tailwind-merge": "^2.5.2",
-    "vuedraggable": "^4.1.0"
-  },
-  "overrides": {
-    "vue": "latest"
-  }
+    "name": "nuxt-app",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "nuxt build",
+        "dev": "nuxt dev",
+        "generate": "nuxt generate",
+        "preview": "nuxt preview",
+        "postinstall": "nuxt prepare",
+        "lint": "eslint .",
+        "format": "prettier --write \"**/*.+(ts|mjs|vue|json|css|md)\""
+    },
+    "dependencies": {
+        "@nuxt/fonts": "^0.7.2",
+        "@pinia/nuxt": "^0.5.4",
+        "nuxt": "^3.13.0",
+        "vue": "latest"
+    },
+    "devDependencies": {
+        "@heroicons/vue": "^2.1.5",
+        "@nuxt/eslint": "^0.5.2",
+        "@nuxt/eslint-config": "^0.5.2",
+        "@nuxtjs/eslint-config-typescript": "^12.1.0",
+        "@nuxtjs/tailwindcss": "^6.12.1",
+        "autoprefixer": "^10.4.20",
+        "eslint": "^8.57.0",
+        "eslint-config-prettier": "^9.1.0",
+        "eslint-plugin-tailwindcss": "^3.17.4",
+        "pinia": "^2.2.2",
+        "postcss": "^8.4.41",
+        "prettier": "^3.3.3",
+        "prettier-plugin-tailwindcss": "^0.6.6",
+        "tailwind-merge": "^2.5.2",
+        "vuedraggable": "^4.1.0"
+    },
+    "overrides": {
+        "vue": "latest"
+    }
 }
