@@ -79,6 +79,7 @@ import type { IChangeTaskProps } from './change-task-dialog.props'
 
 import { fakePerformers, fakeResponsiblePersons } from '~/components/create-task-dialog/fake-data'
 import { PriorityEnum, StatusEnum, type ITask } from '~/types'
+
 const props = defineProps<IChangeTaskProps>()
 const emit = defineEmits<{
     (e: 'update-task', value: ITask): void

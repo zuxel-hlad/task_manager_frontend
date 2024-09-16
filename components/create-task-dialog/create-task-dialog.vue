@@ -74,7 +74,7 @@ import { PriorityEnum } from '~/types'
 const props = defineProps<ICreateTaskDialogProps>()
 const emit = defineEmits<{
     (e: 'create-task', value: ITask): void
-    (event: 'close-dialog'): void
+    (e: 'close-dialog'): void
 }>()
 
 const taskName = ref<string>('')

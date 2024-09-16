@@ -59,17 +59,18 @@ import { StatusEnum } from '~/types'
 
 const store = useTasksStore()
 
-onBeforeMount(() => {
-    if (localStorage.getItem('tasks')) {
-        const tasks = JSON.parse(localStorage.getItem('tasks') ?? '[]')
-
-        if (typeof tasks !== 'string' && tasks) {
-            store.tasks = tasks
-        }
+onMounted(() => {
+    const tasks = localStorage.getItem('tasks')
+    if (tasks) {
+        store.tasks = JSON.parse(tasks)
+    } else {
+        localStorage.setItem('tasks', JSON.stringify([]))
     }
 })
 
-onUpdated(() => {
-    localStorage.setItem('tasks', JSON.stringify(store.tasks))
+watchEffect(() => {
+    if (window && store.tasks.length) {
+        localStorage.setItem('tasks', JSON.stringify(store.tasks))
+    }
 })
 </script>
